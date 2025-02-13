@@ -6,13 +6,13 @@ const ENVIRONMENTS = {
 };
 Object.freeze(ENVIRONMENTS);
 
-const colors = {
-  reset: "\x1b[0m",
-  dim: "\x1b[2m",
-  blue: "\x1b[34m",
-  cyan: "\x1b[36m",
-  yellow: "\x1b[33m",
-  red: "\x1b[31m",
+const COLORS = {
+  RESET: "\x1b[0m",
+  DIM: "\x1b[2m",
+  BLUE: "\x1b[34m",
+  CYAN: "\x1b[36m",
+  YELLOW: "\x1b[33m",
+  RED: "\x1b[31m",
 };
 
 let environment = ENVIRONMENTS.DEVELOPMENT;
@@ -45,23 +45,23 @@ const formatDevelopmentLog = (level, args) => {
   const formattedArgs = formatArgs(args);
 
   const levelColors = {
-    log: colors.blue,
-    info: colors.cyan,
-    warn: colors.yellow,
-    error: colors.red,
+    log: COLORS.BLUE,
+    info: COLORS.CYAN,
+    warn: COLORS.YELLOW,
+    error: COLORS.RED,
   };
 
   const output = [
-    `${colors.dim}${timestamp}${colors.reset}`,
-    `${levelColors[level] || colors.blue}[${level.toUpperCase()}]${
-      colors.reset
+    `${COLORS.DIM}${timestamp}${COLORS.RESET}`,
+    `${levelColors[level] || COLORS.BLUE}[${level.toUpperCase()}]${
+      COLORS.RESET
     }`,
     ...formattedArgs,
   ];
 
   if (level === "error" || level === "warn") {
     const stack = getStackTrace();
-    output.push(`\n${colors.dim}${stack}${colors.reset}`);
+    output.push(`\n${COLORS.DIM}${stack}${COLORS.RESET}`);
   }
 
   return output;

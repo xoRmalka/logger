@@ -18,9 +18,7 @@ const COLORS = {
 let environment = ENVIRONMENTS.DEVELOPMENT;
 let initialized = false;
 
-const getTimestamp = () => {
-  return new Date().toISOString();
-};
+const getTimestamp = () => new Date().toISOString();
 
 const getStackTrace = () => {
   const stack = new Error().stack.split("\n").slice(5).join("\n");
@@ -28,16 +26,11 @@ const getStackTrace = () => {
 };
 
 const formatArgs = (args) => {
-  return args.map((arg) => {
-    if (arg instanceof Error) {
-      return {
-        message: arg.message,
-        stack: arg.stack,
-        name: arg.name,
-      };
-    }
-    return arg;
-  });
+  return args.map((arg) =>
+    arg instanceof Error
+      ? { message: arg.message, stack: arg.stack, name: arg.name }
+      : arg
+  );
 };
 
 const formatDevelopmentLog = (level, args) => {
@@ -60,8 +53,7 @@ const formatDevelopmentLog = (level, args) => {
   ];
 
   if (level === "error" || level === "warn") {
-    const stack = getStackTrace();
-    output.push(`\n${COLORS.DIM}${stack}${COLORS.RESET}`);
+    output.push(`\n${COLORS.DIM}${getStackTrace()}${COLORS.RESET}`);
   }
 
   return output;
@@ -96,18 +88,10 @@ const init = (options = {}) => {
 };
 
 const logger = {
-  log(...args) {
-    loggerMethods[environment].log(...args);
-  },
-  info(...args) {
-    loggerMethods[environment].info(...args);
-  },
-  warn(...args) {
-    loggerMethods[environment].warn(...args);
-  },
-  error(...args) {
-    loggerMethods[environment].error(...args);
-  },
+  log: (...args) => loggerMethods[environment].log(...args),
+  info: (...args) => loggerMethods[environment].info(...args),
+  warn: (...args) => loggerMethods[environment].warn(...args),
+  error: (...args) => loggerMethods[environment].error(...args),
 };
 
 module.exports = { init, logger };

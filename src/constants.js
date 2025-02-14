@@ -4,13 +4,13 @@ const ENVIRONMENTS = {
 };
 Object.freeze(ENVIRONMENTS);
 
-const LOGGER_METHODS_NAMES = {
+const LOG_LEVELS = {
     LOG: "log",
     INFO: "info",
     WARN: "warn",
     ERROR: "error",
 };
-Object.freeze(LOGGER_METHODS_NAMES);
+Object.freeze(LOG_LEVELS);
 
 const COLORS = {
     RESET: "\x1b[0m",
@@ -19,6 +19,13 @@ const COLORS = {
     CYAN: "\x1b[36m",
     YELLOW: "\x1b[33m",
     RED: "\x1b[31m",
+};
+
+const LEVEL_COLORS = {
+    [LOG_LEVELS.LOG]: COLORS.BLUE,
+    [LOG_LEVELS.INFO]: COLORS.CYAN,
+    [LOG_LEVELS.WARN]: COLORS.YELLOW,
+    [LOG_LEVELS.ERROR]: COLORS.RED,
 };
 
 const INIT_ERROR_MESSAGES = {
@@ -30,7 +37,8 @@ const INIT_ERROR_MESSAGES = {
 
 module.exports = {
     ENVIRONMENTS,
-    LOGGER_METHODS_NAMES,
+    LOG_LEVELS,
     COLORS,
+    LEVEL_COLORS,
     INIT_ERROR_MESSAGES,
 };

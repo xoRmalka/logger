@@ -1,7 +1,8 @@
 const ServiceLogger = require("./serviceLogger");
 const {
     ENVIRONMENTS,
-    LOGGER_METHODS_NAMES,
+    LOG_LEVELS,
+    LEVEL_COLORS,
     COLORS,
     INIT_ERROR_MESSAGES,
 } = require("./constants");
@@ -12,54 +13,24 @@ let loggerMethods = {};
 
 const getTimestamp = () => new Date().toISOString();
 
-const getStackTrace = () => {
-    const stack = new Error().stack.split("\n").slice(5).join("\n");
-    return stack;
-};
-
-const formatArgs = (args) => {
-    return args.map((arg) =>
-        arg instanceof Error ?
-        { message: arg.message, stack: arg.stack, name: arg.name } :
-        arg
-    );
+const developmentLoggerMethods = {
+    [LOG_LEVELS.LOG]: (...args) =>
+        console.log(...formatDevelopmentLog(LOG_LEVELS.LOG, args)),
+    [LOG_LEVELS.INFO]: (...args) =>
+        console.info(...formatDevelopmentLog(LOG_LEVELS.INFO, args)),
+    [LOG_LEVELS.WARN]: (...args) =>
+        console.warn(...formatDevelopmentLog(LOG_LEVELS.WARN, args)),
+    [LOG_LEVELS.ERROR]: (...args) =>
+        console.error(...formatDevelopmentLog(LOG_LEVELS.ERROR, args)),
 };
 
 const formatDevelopmentLog = (level, args) => {
-    const timestamp = getTimestamp();
-    const formattedArgs = formatArgs(args);
+    const timestamp = `${COLORS.DIM}${getTimestamp()}${COLORS.RESET}`;
 
-    const levelColors = {
-        log: COLORS.BLUE,
-        info: COLORS.CYAN,
-        warn: COLORS.YELLOW,
-        error: COLORS.RED,
-    };
+    const levelColor = LEVEL_COLORS[level] || COLORS.BLUE;
+    const coloredLevel = `${levelColor}[${level.toUpperCase()}]${COLORS.RESET}`;
 
-    const output = [
-        `${COLORS.DIM}${timestamp}${COLORS.RESET}`,
-        `${levelColors[level] || COLORS.BLUE}[${level.toUpperCase()}]${
-      COLORS.RESET
-    }`,
-        ...formattedArgs,
-    ];
-
-    if (level === "error" || level === "warn") {
-        output.push(`\n${COLORS.DIM}${getStackTrace()}${COLORS.RESET}`);
-    }
-
-    return output;
-};
-
-const developmentLoggerMethods = {
-    [LOGGER_METHODS_NAMES.LOG]: (...args) =>
-        console.log(...formatDevelopmentLog(LOGGER_METHODS_NAMES.LOG, args)),
-    [LOGGER_METHODS_NAMES.INFO]: (...args) =>
-        console.info(...formatDevelopmentLog(LOGGER_METHODS_NAMES.INFO, args)),
-    [LOGGER_METHODS_NAMES.WARN]: (...args) =>
-        console.warn(...formatDevelopmentLog(LOGGER_METHODS_NAMES.WARN, args)),
-    [LOGGER_METHODS_NAMES.ERROR]: (...args) =>
-        console.error(...formatDevelopmentLog(LOGGER_METHODS_NAMES.ERROR, args)),
+    return [timestamp, coloredLevel, ...args];
 };
 
 const init = (options = {}) => {
@@ -89,7 +60,7 @@ const init = (options = {}) => {
     return true;
 };
 
-const createLoggerMethod =
+const executeLoggerMethod =
     (level) =>
     (...args) => {
         if (!initialized) {
@@ -99,10 +70,10 @@ const createLoggerMethod =
     };
 
 const logger = {
-    [LOGGER_METHODS_NAMES.LOG]: createLoggerMethod(LOGGER_METHODS_NAMES.LOG),
-    [LOGGER_METHODS_NAMES.INFO]: createLoggerMethod(LOGGER_METHODS_NAMES.INFO),
-    [LOGGER_METHODS_NAMES.WARN]: createLoggerMethod(LOGGER_METHODS_NAMES.WARN),
-    [LOGGER_METHODS_NAMES.ERROR]: createLoggerMethod(LOGGER_METHODS_NAMES.ERROR),
+    [LOG_LEVELS.LOG]: executeLoggerMethod(LOG_LEVELS.LOG),
+    [LOG_LEVELS.INFO]: executeLoggerMethod(LOG_LEVELS.INFO),
+    [LOG_LEVELS.WARN]: executeLoggerMethod(LOG_LEVELS.WARN),
+    [LOG_LEVELS.ERROR]: executeLoggerMethod(LOG_LEVELS.ERROR),
 };
 
 module.exports = { init, logger };

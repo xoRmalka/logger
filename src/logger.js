@@ -17,6 +17,7 @@ const {
     colorizeLogParts,
     formatJsonLog,
     formatTextLog,
+    formatError,
 } = require("./utils/utils");
 
 let initialized = false;
@@ -27,6 +28,7 @@ const loggerConfig = {
     timeStampFormat: TIMESTAMP_FORMATS.ISO,
     colorizeLogs: true,
     logFormat: LOG_FORMATS.RAW,
+    showStackTrace: false,
 };
 
 const developmentLoggerMethods = {
@@ -57,17 +59,33 @@ const formatDevelopmentLog = (level, args) => {
         getTimestamp(loggerConfig.timeStampFormat) :
         undefined;
 
+    const argsWithFormattedErrors = args.map((arg) => {
+        if (arg instanceof Error) {
+            return formatError(
+                arg,
+                loggerConfig.showStackTrace,
+                loggerConfig.logFormat
+            );
+        }
+        return arg;
+    });
+
     switch (loggerConfig.logFormat) {
         case LOG_FORMATS.JSON:
-            return formatJsonLog(timestamp, level, args);
+            return formatJsonLog(timestamp, level, argsWithFormattedErrors);
 
         case LOG_FORMATS.TEXT:
-            return formatTextLog(timestamp, level, args, loggerConfig.colorizeLogs);
+            return formatTextLog(
+                timestamp,
+                level,
+                argsWithFormattedErrors,
+                loggerConfig.colorizeLogs
+            );
             // TODO: Maybe implement RAW format or throw an error if it's not supported
         default: // RAW format
             return loggerConfig.colorizeLogs ?
-                colorizeLogParts(timestamp, level, args) :
-                [timestamp, `[${level.toUpperCase()}]`, ...args];
+                colorizeLogParts(timestamp, level, argsWithFormattedErrors) :
+                [timestamp, `[${level.toUpperCase()}]`, ...argsWithFormattedErrors];
     }
 };
 
@@ -85,6 +103,7 @@ const init = (options = {}) => {
         timeStampFormat,
         colorizeLogs,
         logFormat,
+        showStackTrace,
     } = options;
 
     const environment =
@@ -100,6 +119,7 @@ const init = (options = {}) => {
     if (isString(timeStampFormat)) loggerConfig.timeStampFormat = timeStampFormat;
     if (isBoolean(colorizeLogs)) loggerConfig.colorizeLogs = colorizeLogs;
     if (isString(logFormat)) loggerConfig.logFormat = logFormat;
+    if (isBoolean(showStackTrace)) loggerConfig.showStackTrace = showStackTrace;
 
     if (environment === ENVIRONMENTS.PRODUCTION) {
         if (!apiKey) {

@@ -3,7 +3,12 @@ const {
     COLORS,
     LEVEL_COLORS,
     VARIABLE_TYPES,
+    LOG_FORMATS,
+    LOG_LEVELS,
 } = require("../constants");
+
+const isBoolean = (value) => typeof value === VARIABLE_TYPES.BOOLEAN;
+const isString = (value) => typeof value === VARIABLE_TYPES.STRING;
 
 const getTimestamp = (timeStampFormat) => {
     switch (timeStampFormat) {
@@ -53,14 +58,52 @@ const formatTextLog = (timestamp, level, args, useColors) => {
         [timestamp, `[${level.toUpperCase()}]`, ...formattedArgs];
 };
 
-const isBoolean = (value) => typeof value === VARIABLE_TYPES.BOOLEAN;
-const isString = (value) => typeof value === VARIABLE_TYPES.STRING;
+const formatError = (error, showStackTrace, logFormat) => {
+    if (!(error instanceof Error)) return error;
+
+    if (!showStackTrace) {
+        const { stack, ...errorProps } = error;
+        return {
+            type: LOG_LEVELS.ERROR,
+            name: error.name,
+            message: error.message,
+            ...errorProps,
+        };
+    }
+
+    if (logFormat === LOG_FORMATS.TEXT) {
+        let result = `${error.name}: ${error.message}`;
+        if (error.stack) {
+            result +=
+                "\n" +
+                error.stack
+                .split("\n")
+                .slice(1)
+                .map((line) => `  ${line.trim()}`)
+                .join("\n");
+        }
+        return result;
+    }
+
+    if (logFormat === LOG_FORMATS.JSON) {
+        return {
+            type: LOG_LEVELS.ERROR,
+            name: error.name,
+            message: error.message,
+            stack: error.stack,
+            ...error,
+        };
+    }
+
+    return error;
+};
 
 module.exports = {
     getTimestamp,
     colorizeLogParts,
     formatJsonLog,
     formatTextLog,
+    formatError,
     isBoolean,
     isString,
 };

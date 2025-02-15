@@ -45,6 +45,13 @@ const INIT_ERROR_MESSAGES = {
     INVALID_LOG_LEVEL: "Invalid log level. Must be one of the following: 'log', 'info', 'warn', 'error'.",
 };
 
+const TIMESTAMP_FORMATS = {
+    ISO: "ISO",
+    LOCALE: "LOCALE",
+    UNIX: "UNIX",
+};
+Object.freeze(TIMESTAMP_FORMATS);
+
 module.exports = {
     ENVIRONMENTS,
     LOG_LEVELS,
@@ -52,4 +59,5 @@ module.exports = {
     COLORS,
     LEVEL_COLORS,
     INIT_ERROR_MESSAGES,
+    TIMESTAMP_FORMATS,
 };

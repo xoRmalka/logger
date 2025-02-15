@@ -8,6 +8,8 @@ const {
     LOG_LEVELS_PRIORITY,
 } = require("./constants");
 
+const { getTimestamp } = require("./utils/utils");
+
 let initialized = false;
 const loggerConfig = {
     currentLogLevel: LOG_LEVELS.LOG,
@@ -15,19 +17,6 @@ const loggerConfig = {
     showTimestamp: true,
     timeStampFormat: "ISO",
     colorLogs: true,
-};
-
-const getTimestamp = () => {
-    switch (loggerConfig.timeStampFormat) {
-        case "ISO":
-            return new Date().toISOString();
-        case "LOCALE":
-            return new Date().toLocaleString();
-        case "UNIX":
-            return new Date().getTime();
-        default:
-            return new Date().toISOString();
-    }
 };
 
 const developmentLoggerMethods = {
@@ -68,7 +57,9 @@ const formatDevelopmentArgs = (args) => {
 };
 
 const formatDevelopmentLog = (level, args) => {
-    const timestamp = loggerConfig.showTimestamp ? getTimestamp() : "";
+    const timestamp = loggerConfig.showTimestamp ?
+        getTimestamp(loggerConfig.timeStampFormat) :
+        "";
     const upperCaseLevel = level.toUpperCase();
 
     if (loggerConfig.colorLogs) {

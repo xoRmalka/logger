@@ -14,6 +14,7 @@ const loggerConfig = {
     loggerMethods: {},
     showTimestamp: true,
     timeStampFormat: "ISO",
+    colorLogs: true,
 };
 
 const getTimestamp = () => {
@@ -67,12 +68,17 @@ const formatDevelopmentArgs = (args) => {
 };
 
 const formatDevelopmentLog = (level, args) => {
-    const timestamp = loggerConfig.showTimestamp ?
-        `${COLORS.DIM}${getTimestamp()}${COLORS.RESET}` :
-        "";
-    const levelColor = LEVEL_COLORS[level] || COLORS.BLUE;
-    const coloredLevel = `${levelColor}[${level.toUpperCase()}]${COLORS.RESET}`;
-    return [timestamp, coloredLevel, ...formatDevelopmentArgs(args)];
+    const timestamp = loggerConfig.showTimestamp ? getTimestamp() : "";
+    const upperCaseLevel = level.toUpperCase();
+
+    if (loggerConfig.colorLogs) {
+        const coloredTimestamp = `${COLORS.DIM}${timestamp}${COLORS.RESET}`;
+        const levelColor = LEVEL_COLORS[level] || COLORS.BLUE;
+        const coloredLevel = `${levelColor}[${upperCaseLevel}]${COLORS.RESET}`;
+        return [coloredTimestamp, coloredLevel, ...formatDevelopmentArgs(args)];
+    }
+
+    return [timestamp, upperCaseLevel, ...formatDevelopmentArgs(args)];
 };
 
 const init = (options = {}) => {
@@ -87,6 +93,7 @@ const init = (options = {}) => {
         apiEndpoint,
         showTimestamp,
         timeStampFormat,
+        colorLogs,
     } = options;
 
     const environment =
@@ -100,6 +107,7 @@ const init = (options = {}) => {
 
     if (showTimestamp !== undefined) loggerConfig.showTimestamp = showTimestamp;
     if (timeStampFormat) loggerConfig.timeStampFormat = timeStampFormat;
+    if (colorLogs !== undefined) loggerConfig.colorLogs = colorLogs;
 
     if (environment === ENVIRONMENTS.PRODUCTION) {
         if (!apiKey) {

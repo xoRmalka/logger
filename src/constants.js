@@ -49,7 +49,6 @@ const TIMESTAMP_FORMATS = {
     ISO: "ISO",
     LOCALE: "LOCALE",
     UNIX: "UNIX",
-    INVALID: "INVALID",
 };
 Object.freeze(TIMESTAMP_FORMATS);
 
@@ -68,6 +67,9 @@ const VARIABLE_TYPES = {
 };
 Object.freeze(VARIABLE_TYPES);
 
+const INVALID_STRING = "INVALID";
+const TEST_MESSAGE = "Test message";
+
 module.exports = {
     ENVIRONMENTS,
     LOG_LEVELS,
@@ -78,4 +80,6 @@ module.exports = {
     TIMESTAMP_FORMATS,
     LOG_FORMATS,
     VARIABLE_TYPES,
+    INVALID_STRING,
+    TEST_MESSAGE,
 };

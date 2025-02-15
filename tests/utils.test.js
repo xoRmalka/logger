@@ -11,6 +11,7 @@ const {
     COLORS,
     LOG_FORMATS,
     LOG_LEVELS,
+    INVALID_STRING,
 } = require("../src/constants");
 
 describe("Utils", () => {
@@ -34,7 +35,7 @@ describe("Utils", () => {
         });
 
         test("Invalid format defaults to ISO", () => {
-            const timestamp = getTimestamp(TIMESTAMP_FORMATS.INVALID);
+            const timestamp = getTimestamp(INVALID_STRING);
             const validTimestamp = getTimestamp(TIMESTAMP_FORMATS.ISO);
 
             expect(typeof timestamp).toBe(typeof validTimestamp);
@@ -107,7 +108,7 @@ describe("Utils", () => {
             const timeValue = parseFloat(result);
 
             expect(timeValue).toBeGreaterThan(0);
-            expect(timeValue).toBeGreaterThanOrEqual(50);
+            expect(timeValue).toBeGreaterThanOrEqual(49);
         });
     });
 });

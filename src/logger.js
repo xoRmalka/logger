@@ -182,6 +182,18 @@ const setLogLevel = (level) => {
     loggerConfig.currentLogLevel = level;
 };
 
+const resetLogger = () => {
+    initialized = false;
+    loggerConfig.currentLogLevel = LOG_LEVELS.LOG;
+    loggerConfig.loggerMethods = {};
+    loggerConfig.showTimestamp = true;
+    loggerConfig.timeStampFormat = TIMESTAMP_FORMATS.ISO;
+    loggerConfig.colorizeLogs = true;
+    loggerConfig.logFormat = LOG_FORMATS.RAW;
+    loggerConfig.showStackTrace = false;
+    loggerConfig.showExecutionTime = false;
+};
+
 const logger = {
     [LOG_LEVELS.LOG]: executeLoggerMethod(LOG_LEVELS.LOG),
     [LOG_LEVELS.INFO]: executeLoggerMethod(LOG_LEVELS.INFO),
@@ -190,4 +202,4 @@ const logger = {
     setLogLevel,
 };
 
-module.exports = { init, logger };
+module.exports = { init, logger, resetLogger };

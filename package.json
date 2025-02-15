@@ -1,20 +1,24 @@
 {
-  "name": "mylogger",
-  "version": "1.0.0",
-  "description": "A flexible logging package that supports both development and production environments.",
-  "main": "src/logger.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/xoRmalka/logger.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/xoRmalka/logger/issues"
-  },
-  "homepage": "https://github.com/xoRmalka/logger#readme"
+    "name": "mylogger",
+    "version": "1.0.0",
+    "description": "A flexible logging package that supports both development and production environments.",
+    "main": "src/logger.js",
+    "scripts": {
+        "test": "jest",
+        "test:watch": "jest --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/xoRmalka/logger.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/xoRmalka/logger/issues"
+    },
+    "homepage": "https://github.com/xoRmalka/logger#readme",
+    "devDependencies": {
+        "jest": "^29.0.0"
+    }
 }

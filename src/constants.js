@@ -49,6 +49,7 @@ const TIMESTAMP_FORMATS = {
     ISO: "ISO",
     LOCALE: "LOCALE",
     UNIX: "UNIX",
+    INVALID: "INVALID",
 };
 Object.freeze(TIMESTAMP_FORMATS);
 

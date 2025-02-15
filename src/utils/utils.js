@@ -113,4 +113,5 @@ module.exports = {
     isBoolean,
     isString,
     getExecutionTime,
+    colorize,
 };

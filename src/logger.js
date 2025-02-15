@@ -63,7 +63,12 @@ const init = (options = {}) => {
         throw new Error(INIT_ERROR_MESSAGES.ALREADY_INITIALIZED);
     }
 
-    const { environment: optionsEnvironment, logLevel, apiKey } = options;
+    const {
+        environment: optionsEnvironment,
+        logLevel,
+        apiKey,
+        apiEndpoint,
+    } = options;
 
     const environment =
         optionsEnvironment || process.env.ENVIRONMENT || ENVIRONMENTS.DEVELOPMENT;
@@ -78,7 +83,11 @@ const init = (options = {}) => {
         if (!apiKey) {
             throw new Error(INIT_ERROR_MESSAGES.MISSING_API_KEY);
         }
-        ServiceLogger.init(apiKey);
+        if (!apiEndpoint) {
+            throw new Error(INIT_ERROR_MESSAGES.MISSING_API_ENDPOINT);
+        }
+
+        ServiceLogger.init(apiKey, apiEndpoint);
         loggerMethods = ServiceLogger;
     }
 

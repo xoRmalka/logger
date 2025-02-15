@@ -5,18 +5,28 @@ const {
     LEVEL_COLORS,
     COLORS,
     INIT_ERROR_MESSAGES,
+    TIMESTAMP_FORMATS,
     LOG_LEVELS_PRIORITY,
+    LOG_FORMATS,
 } = require("./constants");
 
-const { getTimestamp, isBoolean, isString } = require("./utils/utils");
+const {
+    getTimestamp,
+    isBoolean,
+    isString,
+    colorizeLogParts,
+    formatJsonLog,
+    formatTextLog,
+} = require("./utils/utils");
 
 let initialized = false;
 const loggerConfig = {
     currentLogLevel: LOG_LEVELS.LOG,
     loggerMethods: {},
     showTimestamp: true,
-    timeStampFormat: "ISO",
-    colorLogs: true,
+    timeStampFormat: TIMESTAMP_FORMATS.ISO,
+    colorizeLogs: true,
+    logFormat: LOG_FORMATS.RAW,
 };
 
 const developmentLoggerMethods = {
@@ -42,35 +52,23 @@ function logError(...args) {
     console.error(...formatDevelopmentLog(LOG_LEVELS.ERROR, args));
 }
 
-const formatDevelopmentArgs = (args) => {
-    return args.map((arg) => {
-        // if (arg instanceof Error) {
-        //     return {
-        //         message: arg.message,
-        //         stack: arg.stack,
-        //         name: arg.name,
-        //         ...arg,
-        //     };
-        // }
-        return arg;
-    });
-};
-
 const formatDevelopmentLog = (level, args) => {
     const timestamp = loggerConfig.showTimestamp ?
         getTimestamp(loggerConfig.timeStampFormat) :
-        "";
+        undefined;
 
-    const upperCaseLevel = level.toUpperCase();
+    switch (loggerConfig.logFormat) {
+        case LOG_FORMATS.JSON:
+            return formatJsonLog(timestamp, level, args);
 
-    if (loggerConfig.colorLogs) {
-        const coloredTimestamp = `${COLORS.DIM}${timestamp}${COLORS.RESET}`;
-        const levelColor = LEVEL_COLORS[level] || COLORS.BLUE;
-        const coloredLevel = `${levelColor}[${upperCaseLevel}]${COLORS.RESET}`;
-        return [coloredTimestamp, coloredLevel, ...formatDevelopmentArgs(args)];
+        case LOG_FORMATS.TEXT:
+            return formatTextLog(timestamp, level, args, loggerConfig.colorizeLogs);
+            // TODO: Maybe implement RAW format or throw an error if it's not supported
+        default: // RAW format
+            return loggerConfig.colorizeLogs ?
+                colorizeLogParts(timestamp, level, args) :
+                [timestamp, `[${level.toUpperCase()}]`, ...args];
     }
-
-    return [timestamp, upperCaseLevel, ...formatDevelopmentArgs(args)];
 };
 
 const init = (options = {}) => {
@@ -85,7 +83,8 @@ const init = (options = {}) => {
         apiEndpoint,
         showTimestamp,
         timeStampFormat,
-        colorLogs,
+        colorizeLogs,
+        logFormat,
     } = options;
 
     const environment =
@@ -99,7 +98,8 @@ const init = (options = {}) => {
 
     if (isBoolean(showTimestamp)) loggerConfig.showTimestamp = showTimestamp;
     if (isString(timeStampFormat)) loggerConfig.timeStampFormat = timeStampFormat;
-    if (isBoolean(colorLogs)) loggerConfig.colorLogs = colorLogs;
+    if (isBoolean(colorizeLogs)) loggerConfig.colorizeLogs = colorizeLogs;
+    if (isString(logFormat)) loggerConfig.logFormat = logFormat;
 
     if (environment === ENVIRONMENTS.PRODUCTION) {
         if (!apiKey) {
@@ -115,6 +115,13 @@ const init = (options = {}) => {
 
     if (environment === ENVIRONMENTS.DEVELOPMENT) {
         loggerConfig.loggerMethods = developmentLoggerMethods;
+        // TODO: Maybe throw an error instead of warning
+        if (logFormat === LOG_FORMATS.JSON && colorizeLogs) {
+            loggerConfig.colorizeLogs = false;
+            console.warn(
+                "Color logs are automatically disabled when using JSON format."
+            );
+        }
     }
 
     initialized = true;

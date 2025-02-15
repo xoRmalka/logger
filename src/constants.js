@@ -52,6 +52,21 @@ const TIMESTAMP_FORMATS = {
 };
 Object.freeze(TIMESTAMP_FORMATS);
 
+const LOG_FORMATS = {
+    RAW: "raw",
+    JSON: "json",
+    TEXT: "text",
+};
+Object.freeze(LOG_FORMATS);
+
+const VARIABLE_TYPES = {
+    STRING: "string",
+    NUMBER: "number",
+    BOOLEAN: "boolean",
+    OBJECT: "object",
+};
+Object.freeze(VARIABLE_TYPES);
+
 module.exports = {
     ENVIRONMENTS,
     LOG_LEVELS,
@@ -60,4 +75,6 @@ module.exports = {
     LEVEL_COLORS,
     INIT_ERROR_MESSAGES,
     TIMESTAMP_FORMATS,
+    LOG_FORMATS,
+    VARIABLE_TYPES,
 };

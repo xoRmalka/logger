@@ -8,11 +8,26 @@ const {
     LOG_LEVELS_PRIORITY,
 } = require("./constants");
 
-let currentLogLevel = LOG_LEVELS.LOG;
 let initialized = false;
-let loggerMethods = {};
+const loggerConfig = {
+    currentLogLevel: LOG_LEVELS.LOG,
+    loggerMethods: {},
+    showTimestamp: true,
+    timeStampFormat: "ISO",
+};
 
-const getTimestamp = () => new Date().toISOString();
+const getTimestamp = () => {
+    switch (loggerConfig.timeStampFormat) {
+        case "ISO":
+            return new Date().toISOString();
+        case "LOCALE":
+            return new Date().toLocaleString();
+        case "UNIX":
+            return new Date().getTime();
+        default:
+            return new Date().toISOString();
+    }
+};
 
 const developmentLoggerMethods = {
     [LOG_LEVELS.LOG]: logLog,
@@ -52,7 +67,9 @@ const formatDevelopmentArgs = (args) => {
 };
 
 const formatDevelopmentLog = (level, args) => {
-    const timestamp = `${COLORS.DIM}${getTimestamp()}${COLORS.RESET}`;
+    const timestamp = loggerConfig.showTimestamp ?
+        `${COLORS.DIM}${getTimestamp()}${COLORS.RESET}` :
+        "";
     const levelColor = LEVEL_COLORS[level] || COLORS.BLUE;
     const coloredLevel = `${levelColor}[${level.toUpperCase()}]${COLORS.RESET}`;
     return [timestamp, coloredLevel, ...formatDevelopmentArgs(args)];
@@ -68,6 +85,8 @@ const init = (options = {}) => {
         logLevel,
         apiKey,
         apiEndpoint,
+        showTimestamp,
+        timeStampFormat,
     } = options;
 
     const environment =
@@ -79,6 +98,9 @@ const init = (options = {}) => {
 
     if (logLevel) setLogLevel(logLevel);
 
+    if (showTimestamp !== undefined) loggerConfig.showTimestamp = showTimestamp;
+    if (timeStampFormat) loggerConfig.timeStampFormat = timeStampFormat;
+
     if (environment === ENVIRONMENTS.PRODUCTION) {
         if (!apiKey) {
             throw new Error(INIT_ERROR_MESSAGES.MISSING_API_KEY);
@@ -88,11 +110,11 @@ const init = (options = {}) => {
         }
 
         ServiceLogger.init(apiKey, apiEndpoint);
-        loggerMethods = ServiceLogger;
+        loggerConfig.loggerMethods = ServiceLogger;
     }
 
     if (environment === ENVIRONMENTS.DEVELOPMENT) {
-        loggerMethods = developmentLoggerMethods;
+        loggerConfig.loggerMethods = developmentLoggerMethods;
     }
 
     initialized = true;
@@ -106,8 +128,11 @@ const executeLoggerMethod =
             throw new Error(INIT_ERROR_MESSAGES.NOT_INITIALIZED);
         }
 
-        if (LOG_LEVELS_PRIORITY[level] >= LOG_LEVELS_PRIORITY[currentLogLevel]) {
-            return loggerMethods[level](...args);
+        if (
+            LOG_LEVELS_PRIORITY[level] >=
+            LOG_LEVELS_PRIORITY[loggerConfig.currentLogLevel]
+        ) {
+            return loggerConfig.loggerMethods[level](...args);
         }
     };
 
@@ -119,7 +144,7 @@ const validateLogLevel = (level) => {
 
 const setLogLevel = (level) => {
     validateLogLevel(level);
-    currentLogLevel = level;
+    loggerConfig.currentLogLevel = level;
 };
 
 const logger = {

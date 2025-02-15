@@ -13,4 +13,7 @@ const getTimestamp = (timeStampFormat) => {
     }
 };
 
-module.exports = { getTimestamp };
+const isBoolean = (value) => typeof value === "boolean";
+const isString = (value) => typeof value === "string";
+
+module.exports = { getTimestamp, isBoolean, isString };

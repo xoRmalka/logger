@@ -8,7 +8,7 @@ const {
     LOG_LEVELS_PRIORITY,
 } = require("./constants");
 
-const { getTimestamp } = require("./utils/utils");
+const { getTimestamp, isBoolean, isString } = require("./utils/utils");
 
 let initialized = false;
 const loggerConfig = {
@@ -60,6 +60,7 @@ const formatDevelopmentLog = (level, args) => {
     const timestamp = loggerConfig.showTimestamp ?
         getTimestamp(loggerConfig.timeStampFormat) :
         "";
+
     const upperCaseLevel = level.toUpperCase();
 
     if (loggerConfig.colorLogs) {
@@ -96,9 +97,9 @@ const init = (options = {}) => {
 
     if (logLevel) setLogLevel(logLevel);
 
-    if (showTimestamp !== undefined) loggerConfig.showTimestamp = showTimestamp;
-    if (timeStampFormat) loggerConfig.timeStampFormat = timeStampFormat;
-    if (colorLogs !== undefined) loggerConfig.colorLogs = colorLogs;
+    if (isBoolean(showTimestamp)) loggerConfig.showTimestamp = showTimestamp;
+    if (isString(timeStampFormat)) loggerConfig.timeStampFormat = timeStampFormat;
+    if (isBoolean(colorLogs)) loggerConfig.colorLogs = colorLogs;
 
     if (environment === ENVIRONMENTS.PRODUCTION) {
         if (!apiKey) {

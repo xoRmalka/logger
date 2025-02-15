@@ -23,6 +23,12 @@ const getTimestamp = (timeStampFormat) => {
     }
 };
 
+const getExecutionTime = (startTime) => {
+    const endTime = process.hrtime.bigint();
+    const executionTime = Number(endTime - startTime) / 1000000;
+    return `${executionTime.toFixed(2)}ms`;
+};
+
 const colorize = (text, color) => {
     if (!text) return "";
     return `${color}${text}${COLORS.RESET}`;
@@ -106,4 +112,5 @@ module.exports = {
     formatError,
     isBoolean,
     isString,
+    getExecutionTime,
 };

@@ -2,8 +2,6 @@ const ServiceLogger = require("./serviceLogger");
 const {
     ENVIRONMENTS,
     LOG_LEVELS,
-    LEVEL_COLORS,
-    COLORS,
     INIT_ERROR_MESSAGES,
     TIMESTAMP_FORMATS,
     LOG_LEVELS_PRIORITY,
@@ -18,6 +16,7 @@ const {
     formatJsonLog,
     formatTextLog,
     formatError,
+    getExecutionTime,
 } = require("./utils/utils");
 
 let initialized = false;
@@ -29,6 +28,8 @@ const loggerConfig = {
     colorizeLogs: true,
     logFormat: LOG_FORMATS.RAW,
     showStackTrace: false,
+    startTime: process.hrtime.bigint(),
+    showExecutionTime: false,
 };
 
 const developmentLoggerMethods = {
@@ -58,6 +59,10 @@ const formatDevelopmentLog = (level, args) => {
     const timestamp = loggerConfig.showTimestamp ?
         getTimestamp(loggerConfig.timeStampFormat) :
         undefined;
+
+    if (loggerConfig.showExecutionTime) {
+        args.push({ executionTime: getExecutionTime(loggerConfig.startTime) });
+    }
 
     const argsWithFormattedErrors = args.map((arg) => {
         if (arg instanceof Error) {
@@ -104,6 +109,7 @@ const init = (options = {}) => {
         colorizeLogs,
         logFormat,
         showStackTrace,
+        showExecutionTime,
     } = options;
 
     const environment =
@@ -120,6 +126,8 @@ const init = (options = {}) => {
     if (isBoolean(colorizeLogs)) loggerConfig.colorizeLogs = colorizeLogs;
     if (isString(logFormat)) loggerConfig.logFormat = logFormat;
     if (isBoolean(showStackTrace)) loggerConfig.showStackTrace = showStackTrace;
+    if (isBoolean(showExecutionTime))
+        loggerConfig.showExecutionTime = showExecutionTime;
 
     if (environment === ENVIRONMENTS.PRODUCTION) {
         if (!apiKey) {

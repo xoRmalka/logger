@@ -12,6 +12,14 @@ const LOG_LEVELS = {
 };
 Object.freeze(LOG_LEVELS);
 
+const LOG_LEVELS_PRIORITY = {
+    [LOG_LEVELS.LOG]: 0,
+    [LOG_LEVELS.INFO]: 1,
+    [LOG_LEVELS.WARN]: 2,
+    [LOG_LEVELS.ERROR]: 3,
+};
+Object.freeze(LOG_LEVELS_PRIORITY);
+
 const COLORS = {
     RESET: "\x1b[0m",
     DIM: "\x1b[2m",
@@ -33,11 +41,13 @@ const INIT_ERROR_MESSAGES = {
     NOT_INITIALIZED: "Logger must be initialized before use. Call init() first.",
     MISSING_API_KEY: "API key is required in production environment",
     INVALID_ENVIRONMENT: "Invalid environment. Must be 'development' or 'production'.",
+    INVALID_LOG_LEVEL: "Invalid log level. Must be one of the following: 'log', 'info', 'warn', 'error'.",
 };
 
 module.exports = {
     ENVIRONMENTS,
     LOG_LEVELS,
+    LOG_LEVELS_PRIORITY,
     COLORS,
     LEVEL_COLORS,
     INIT_ERROR_MESSAGES,

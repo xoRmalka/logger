@@ -7,22 +7,22 @@ const ServiceLogger = {
 
     log(...args) {
         // Send standard log message
-        console.log("Logging message to 3rd party service:", ...args);
+        console.log("LOG - Logging message to 3rd party service:", ...args);
     },
 
     info(...args) {
         // Send informational log message
-        console.info("Logging message to 3rd party service:", ...args);
+        console.info("INFO - Logging message to 3rd party service:", ...args);
     },
 
     warn(...args) {
         // Send warning log message
-        console.warn("Logging message to 3rd party service:", ...args);
+        console.warn("WARN - Logging message to 3rd party service:", ...args);
     },
 
     error(...args) {
         // Send error log message
-        console.error("Logging message to 3rd party service:", ...args);
+        console.error("ERROR - Logging message to 3rd party service:", ...args);
     },
 };
 

@@ -6,6 +6,7 @@ const {
     TIMESTAMP_FORMATS,
     LOG_LEVELS_PRIORITY,
     LOG_FORMATS,
+    DEFAULT_LOGGER_CONFIG,
 } = require("./constants");
 
 const {
@@ -21,15 +22,8 @@ const {
 
 let initialized = false;
 const loggerConfig = {
-    currentLogLevel: LOG_LEVELS.LOG,
-    loggerMethods: {},
-    showTimestamp: true,
-    timeStampFormat: TIMESTAMP_FORMATS.ISO,
-    colorizeLogs: true,
-    logFormat: LOG_FORMATS.RAW,
-    showErrorStack: false,
+    ...DEFAULT_LOGGER_CONFIG,
     startTime: process.hrtime.bigint(),
-    showExecutionTime: false,
 };
 
 const developmentLoggerMethods = {
@@ -184,14 +178,8 @@ const setLogLevel = (level) => {
 
 const resetLogger = () => {
     initialized = false;
-    loggerConfig.currentLogLevel = LOG_LEVELS.LOG;
-    loggerConfig.loggerMethods = {};
-    loggerConfig.showTimestamp = true;
-    loggerConfig.timeStampFormat = TIMESTAMP_FORMATS.ISO;
-    loggerConfig.colorizeLogs = true;
-    loggerConfig.logFormat = LOG_FORMATS.RAW;
-    loggerConfig.showErrorStack = false;
-    loggerConfig.showExecutionTime = false;
+    const { startTime } = loggerConfig;
+    Object.assign(loggerConfig, DEFAULT_LOGGER_CONFIG, { startTime });
 };
 
 const logger = {

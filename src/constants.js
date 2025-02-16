@@ -64,6 +64,17 @@ const VARIABLE_TYPES = {
 const INVALID_STRING = "INVALID";
 const TEST_MESSAGE = "Test message";
 
+const DEFAULT_LOGGER_CONFIG = {
+    currentLogLevel: LOG_LEVELS.LOG,
+    loggerMethods: {},
+    showTimestamp: true,
+    timeStampFormat: TIMESTAMP_FORMATS.ISO,
+    colorizeLogs: true,
+    logFormat: LOG_FORMATS.RAW,
+    showErrorStack: false,
+    showExecutionTime: false,
+};
+
 Object.freeze(ENVIRONMENTS);
 Object.freeze(LOG_LEVELS);
 Object.freeze(LOG_LEVELS_PRIORITY);
@@ -73,6 +84,7 @@ Object.freeze(INIT_ERROR_MESSAGES);
 Object.freeze(TIMESTAMP_FORMATS);
 Object.freeze(LOG_FORMATS);
 Object.freeze(VARIABLE_TYPES);
+Object.freeze(DEFAULT_LOGGER_CONFIG);
 
 module.exports = {
     ENVIRONMENTS,
@@ -86,4 +98,5 @@ module.exports = {
     VARIABLE_TYPES,
     INVALID_STRING,
     TEST_MESSAGE,
+    DEFAULT_LOGGER_CONFIG,
 };

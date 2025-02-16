@@ -2,7 +2,6 @@ const ENVIRONMENTS = {
     DEVELOPMENT: "development",
     PRODUCTION: "production",
 };
-Object.freeze(ENVIRONMENTS);
 
 const LOG_LEVELS = {
     LOG: "log",
@@ -10,7 +9,6 @@ const LOG_LEVELS = {
     WARN: "warn",
     ERROR: "error",
 };
-Object.freeze(LOG_LEVELS);
 
 const LOG_LEVELS_PRIORITY = {
     [LOG_LEVELS.LOG]: 0,
@@ -18,7 +16,6 @@ const LOG_LEVELS_PRIORITY = {
     [LOG_LEVELS.WARN]: 2,
     [LOG_LEVELS.ERROR]: 3,
 };
-Object.freeze(LOG_LEVELS_PRIORITY);
 
 const COLORS = {
     RESET: "\x1b[0m",
@@ -50,14 +47,12 @@ const TIMESTAMP_FORMATS = {
     LOCALE: "LOCALE",
     UNIX: "UNIX",
 };
-Object.freeze(TIMESTAMP_FORMATS);
 
 const LOG_FORMATS = {
     RAW: "raw",
     JSON: "json",
     TEXT: "text",
 };
-Object.freeze(LOG_FORMATS);
 
 const VARIABLE_TYPES = {
     STRING: "string",
@@ -65,10 +60,19 @@ const VARIABLE_TYPES = {
     BOOLEAN: "boolean",
     OBJECT: "object",
 };
-Object.freeze(VARIABLE_TYPES);
 
 const INVALID_STRING = "INVALID";
 const TEST_MESSAGE = "Test message";
+
+Object.freeze(ENVIRONMENTS);
+Object.freeze(LOG_LEVELS);
+Object.freeze(LOG_LEVELS_PRIORITY);
+Object.freeze(COLORS);
+Object.freeze(LEVEL_COLORS);
+Object.freeze(INIT_ERROR_MESSAGES);
+Object.freeze(TIMESTAMP_FORMATS);
+Object.freeze(LOG_FORMATS);
+Object.freeze(VARIABLE_TYPES);
 
 module.exports = {
     ENVIRONMENTS,

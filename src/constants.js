@@ -39,7 +39,7 @@ const INIT_ERROR_MESSAGES = {
     MISSING_API_KEY: "[LOGGER] API key is required in production environment",
     MISSING_API_ENDPOINT: "[LOGGER] API endpoint is required in production environment",
     INVALID_ENVIRONMENT: "[LOGGER] Invalid environment. Must be 'development' or 'production'.",
-    INVALID_LOG_LEVEL: "[LOGGER] Invalid log level. Must be one of the following: 'log', 'info', 'warn', 'error'.",
+    INVALID_LOG_LEVEL: "[LOGGER] Invalid log level. Must be one of the following: 'log', 'info', 'warn', 'error'. Setting to 'log' by default.",
 };
 
 const TIMESTAMP_FORMATS = {

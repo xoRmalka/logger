@@ -1,8 +1,9 @@
 // 3rd Party Logging Service API
 const ServiceLogger = {
-    init(apiKey) {
+    init(apiKey, apiEndpoint) {
         // Configure the logging service with an API key
         console.log("Initializing logging service with API key:", apiKey);
+        console.log("Initializing logging service with API endpoint:", apiEndpoint);
     },
 
     log(...args) {

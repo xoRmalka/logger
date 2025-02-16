@@ -36,10 +36,11 @@ const LEVEL_COLORS = {
 const INIT_ERROR_MESSAGES = {
     ALREADY_INITIALIZED: "[LOGGER] Logger has already been initialized",
     NOT_INITIALIZED: "[LOGGER] Logger must be initialized before use. Call init() first.",
-    MISSING_API_KEY: "[LOGGER] API key is required in production environment",
-    MISSING_API_ENDPOINT: "[LOGGER] API endpoint is required in production environment",
-    INVALID_ENVIRONMENT: "[LOGGER] Invalid environment. Must be 'development' or 'production'.",
+    MISSING_API_KEY: "[LOGGER] API key is required in production environment. Cancelling initialization.",
+    MISSING_API_ENDPOINT: "[LOGGER] API endpoint is required in production environment. Cancelling initialization.",
+    INVALID_ENVIRONMENT: "[LOGGER] Invalid environment. Must be 'development' or 'production'. Cancelling initialization.",
     INVALID_LOG_LEVEL: "[LOGGER] Invalid log level. Must be one of the following: 'log', 'info', 'warn', 'error'. Setting to 'log' by default.",
+    JSON_AND_COLORIZE_LOGS: "[LOGGER] Color logs are automatically disabled when using JSON format. Colorize logs is set to false.",
 };
 
 const TIMESTAMP_FORMATS = {

@@ -5,6 +5,7 @@ const {
     VARIABLE_TYPES,
     LOG_FORMATS,
     LOG_LEVELS,
+    INIT_ERROR_MESSAGES,
 } = require("../constants");
 
 const isBoolean = (value) => typeof value === VARIABLE_TYPES.BOOLEAN;
@@ -102,6 +103,14 @@ const formatError = (error, showStackTrace, logFormat) => {
     return error;
 };
 
+const validateLogLevel = (level) => {
+    if (!Object.values(LOG_LEVELS).includes(level)) {
+        console.warn(INIT_ERROR_MESSAGES.INVALID_LOG_LEVEL);
+        return LOG_LEVELS.LOG;
+    }
+    return level;
+};
+
 module.exports = {
     getTimestamp,
     colorizeLogParts,
@@ -112,4 +121,5 @@ module.exports = {
     isString,
     getExecutionTime,
     colorize,
+    validateLogLevel,
 };

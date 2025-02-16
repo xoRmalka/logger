@@ -38,19 +38,18 @@ describe("Logger", () => {
 
         test("throws error when initialized multiple times", () => {
             init();
-            expect(() => init()).toThrow(INIT_ERROR_MESSAGES.ALREADY_INITIALIZED);
+            init();
+            expect(consoleWarnSpy).toHaveBeenCalledWith(INIT_ERROR_MESSAGES.ALREADY_INITIALIZED);
         });
 
         test("throws error for invalid environment", () => {
-            expect(() => init({ environment: INVALID_STRING })).toThrow(
-                INIT_ERROR_MESSAGES.INVALID_ENVIRONMENT
-            );
+            init({ environment: INVALID_STRING });
+            expect(consoleWarnSpy).toHaveBeenCalledWith(INIT_ERROR_MESSAGES.INVALID_ENVIRONMENT);
         });
 
         test("throws error for production without API credentials", () => {
-            expect(() => init({ environment: ENVIRONMENTS.PRODUCTION })).toThrow(
-                INIT_ERROR_MESSAGES.MISSING_API_KEY
-            );
+            init({ environment: ENVIRONMENTS.PRODUCTION });
+            expect(consoleWarnSpy).toHaveBeenCalledWith(INIT_ERROR_MESSAGES.MISSING_API_KEY);
         });
     });
 
@@ -123,10 +122,8 @@ describe("Logger", () => {
         });
 
         test("returns default log level for invalid log level", () => {
-            const warnSpy = jest.spyOn(console, 'warn');
-
             logger.setLogLevel(INVALID_STRING);
-            expect(warnSpy).toHaveBeenCalledWith(INIT_ERROR_MESSAGES.INVALID_LOG_LEVEL);
+            expect(consoleWarnSpy).toHaveBeenCalledWith(INIT_ERROR_MESSAGES.INVALID_LOG_LEVEL);
         });
     });
 
@@ -155,10 +152,8 @@ describe("Logger", () => {
 
     describe("Error Handling", () => {
         test("throws error when logging before initialization", () => {
-            const warnSpy = jest.spyOn(console, "warn");
-
             logger.log(TEST_MESSAGE);
-            expect(warnSpy).toHaveBeenCalledWith(INIT_ERROR_MESSAGES.NOT_INITIALIZED);
+            expect(consoleWarnSpy).toHaveBeenCalledWith(INIT_ERROR_MESSAGES.NOT_INITIALIZED);
         });
     });
 });

@@ -3,7 +3,6 @@ const {
     ENVIRONMENTS,
     LOG_LEVELS,
     INIT_ERROR_MESSAGES,
-    TIMESTAMP_FORMATS,
     LOG_LEVELS_PRIORITY,
     LOG_FORMATS,
     DEFAULT_LOGGER_CONFIG,
@@ -18,10 +17,11 @@ const {
     formatTextLog,
     formatError,
     getExecutionTime,
+    validateLogLevel,
 } = require("./utils/utils");
 
 let initialized = false;
-const loggerConfig = {
+let loggerConfig = {
     ...DEFAULT_LOGGER_CONFIG,
     startTime: process.hrtime.bigint(),
 };
@@ -88,7 +88,8 @@ const formatDevelopmentLog = (level, args) => {
 
 const init = (options = {}) => {
     if (initialized) {
-        throw new Error(INIT_ERROR_MESSAGES.ALREADY_INITIALIZED);
+        console.warn(INIT_ERROR_MESSAGES.ALREADY_INITIALIZED);
+        return false;
     }
 
     const {
@@ -108,7 +109,8 @@ const init = (options = {}) => {
         optionsEnvironment || process.env.ENVIRONMENT || ENVIRONMENTS.DEVELOPMENT;
 
     if (![ENVIRONMENTS.DEVELOPMENT, ENVIRONMENTS.PRODUCTION].includes(environment)) {
-        throw new Error(INIT_ERROR_MESSAGES.INVALID_ENVIRONMENT);
+        console.warn(INIT_ERROR_MESSAGES.INVALID_ENVIRONMENT);
+        return false;
     }
 
     if (logLevel) setLogLevel(logLevel);
@@ -118,15 +120,18 @@ const init = (options = {}) => {
     if (isBoolean(colorizeLogs)) loggerConfig.colorizeLogs = colorizeLogs;
     if (isString(logFormat)) loggerConfig.logFormat = logFormat;
     if (isBoolean(showErrorStack)) loggerConfig.showErrorStack = showErrorStack;
-    if (isBoolean(showExecutionTime))
-        loggerConfig.showExecutionTime = showExecutionTime;
+    if (isBoolean(showExecutionTime)) loggerConfig.showExecutionTime = showExecutionTime;
 
     if (environment === ENVIRONMENTS.PRODUCTION) {
         if (!apiKey) {
-            throw new Error(INIT_ERROR_MESSAGES.MISSING_API_KEY);
+            console.warn(INIT_ERROR_MESSAGES.MISSING_API_KEY);
+            resetLogger();
+            return false;
         }
         if (!apiEndpoint) {
-            throw new Error(INIT_ERROR_MESSAGES.MISSING_API_ENDPOINT);
+            console.warn(INIT_ERROR_MESSAGES.MISSING_API_ENDPOINT);
+            resetLogger();
+            return false;
         }
 
         ServiceLogger.init(apiKey, apiEndpoint);
@@ -135,12 +140,10 @@ const init = (options = {}) => {
 
     if (environment === ENVIRONMENTS.DEVELOPMENT) {
         loggerConfig.loggerMethods = developmentLoggerMethods;
-        // TODO: Maybe throw an error instead of warning
+
         if (logFormat === LOG_FORMATS.JSON && colorizeLogs) {
             loggerConfig.colorizeLogs = false;
-            console.warn(
-                "Color logs are automatically disabled when using JSON format."
-            );
+            console.warn(INIT_ERROR_MESSAGES.JSON_AND_COLORIZE_LOGS);
         }
     }
 
@@ -164,22 +167,13 @@ const executeLoggerMethod =
         }
     };
 
-const validateLogLevel = (level) => {
-    if (!Object.values(LOG_LEVELS).includes(level)) {
-        console.warn(INIT_ERROR_MESSAGES.INVALID_LOG_LEVEL);
-        return LOG_LEVELS.LOG;
-    }
-    return level;
-};
-
 const setLogLevel = (level) => {
     loggerConfig.currentLogLevel = validateLogLevel(level);
 };
 
 const resetLogger = () => {
     initialized = false;
-    const { startTime } = loggerConfig;
-    Object.assign(loggerConfig, DEFAULT_LOGGER_CONFIG, { startTime });
+    loggerConfig = {...DEFAULT_LOGGER_CONFIG, startTime: loggerConfig.startTime };
 };
 
 const logger = {

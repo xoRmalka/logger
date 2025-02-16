@@ -12,12 +12,11 @@ const isString = (value) => typeof value === VARIABLE_TYPES.STRING;
 
 const getTimestamp = (timeStampFormat) => {
     switch (timeStampFormat) {
-        case TIMESTAMP_FORMATS.ISO:
-            return new Date().toISOString();
         case TIMESTAMP_FORMATS.LOCALE:
             return new Date().toLocaleString();
         case TIMESTAMP_FORMATS.UNIX:
             return new Date().getTime();
+        case TIMESTAMP_FORMATS.ISO:
         default:
             return new Date().toISOString();
     }

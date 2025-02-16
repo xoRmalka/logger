@@ -78,7 +78,6 @@ const formatDevelopmentLog = (level, args) => {
     switch (loggerConfig.logFormat) {
         case LOG_FORMATS.JSON:
             return formatJsonLog(timestamp, level, argsWithFormattedErrors);
-
         case LOG_FORMATS.TEXT:
             return formatTextLog(
                 timestamp,
@@ -86,8 +85,8 @@ const formatDevelopmentLog = (level, args) => {
                 argsWithFormattedErrors,
                 loggerConfig.colorizeLogs
             );
-            // TODO: Maybe implement RAW format or throw an error if it's not supported
-        default: // RAW format
+        case LOG_FORMATS.RAW:
+        default:
             return loggerConfig.colorizeLogs ?
                 colorizeLogParts(timestamp, level, argsWithFormattedErrors) : [timestamp, `[${level.toUpperCase()}]`, ...argsWithFormattedErrors];
     }

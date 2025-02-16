@@ -1,4 +1,4 @@
-# MyLogger
+# MyLogger - Node.js Logger Package
 
 A flexible logging package that supports both development and production environments with rich formatting options and configurable features.
 

@@ -172,13 +172,14 @@ const executeLoggerMethod =
 
 const validateLogLevel = (level) => {
     if (!Object.values(LOG_LEVELS).includes(level)) {
-        throw new Error(INIT_ERROR_MESSAGES.INVALID_LOG_LEVEL);
+        console.warn(INIT_ERROR_MESSAGES.INVALID_LOG_LEVEL);
+        return LOG_LEVELS.LOG;
     }
+    return level;
 };
 
 const setLogLevel = (level) => {
-    validateLogLevel(level);
-    loggerConfig.currentLogLevel = level;
+    loggerConfig.currentLogLevel = validateLogLevel(level);
 };
 
 const resetLogger = () => {

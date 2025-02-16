@@ -158,7 +158,8 @@ const executeLoggerMethod =
     (level) =>
     (...args) => {
         if (!initialized) {
-            throw new Error(INIT_ERROR_MESSAGES.NOT_INITIALIZED);
+            console.warn(INIT_ERROR_MESSAGES.NOT_INITIALIZED);
+            return;
         }
 
         if (

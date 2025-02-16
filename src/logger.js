@@ -198,6 +198,7 @@ const logger = {
     [LOG_LEVELS.WARN]: executeLoggerMethod(LOG_LEVELS.WARN),
     [LOG_LEVELS.ERROR]: executeLoggerMethod(LOG_LEVELS.ERROR),
     setLogLevel,
+    resetLogger,
 };
 
-module.exports = { init, logger, resetLogger };
+module.exports = { init, logger };

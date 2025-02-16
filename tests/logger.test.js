@@ -1,4 +1,4 @@
-const { init, logger, resetLogger } = require("../src/logger");
+const { init, logger } = require("../src/logger");
 const {
     ENVIRONMENTS,
     INIT_ERROR_MESSAGES,
@@ -28,7 +28,7 @@ describe("Logger", () => {
     afterEach(() => {
         jest.clearAllMocks();
         jest.resetModules();
-        resetLogger();
+        logger.resetLogger();
     });
 
     describe("Initialization", () => {

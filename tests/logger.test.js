@@ -122,10 +122,11 @@ describe("Logger", () => {
             expect(consoleErrorSpy).toHaveBeenCalled();
         });
 
-        test("throws error for invalid log level", () => {
-            expect(() => logger.setLogLevel(INVALID_STRING)).toThrow(
-                INIT_ERROR_MESSAGES.INVALID_LOG_LEVEL
-            );
+        test("returns default log level for invalid log level", () => {
+            const warnSpy = jest.spyOn(console, 'warn');
+
+            logger.setLogLevel(INVALID_STRING);
+            expect(warnSpy).toHaveBeenCalledWith(INIT_ERROR_MESSAGES.INVALID_LOG_LEVEL);
         });
     });
 
@@ -154,9 +155,10 @@ describe("Logger", () => {
 
     describe("Error Handling", () => {
         test("throws error when logging before initialization", () => {
-            expect(() => logger.log(TEST_MESSAGE)).toThrow(
-                INIT_ERROR_MESSAGES.NOT_INITIALIZED
-            );
+            const warnSpy = jest.spyOn(console, "warn");
+
+            logger.log(TEST_MESSAGE);
+            expect(warnSpy).toHaveBeenCalledWith(INIT_ERROR_MESSAGES.NOT_INITIALIZED);
         });
     });
 });

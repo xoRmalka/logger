@@ -27,7 +27,7 @@ const loggerConfig = {
     timeStampFormat: TIMESTAMP_FORMATS.ISO,
     colorizeLogs: true,
     logFormat: LOG_FORMATS.RAW,
-    showStackTrace: false,
+    showErrorStack: false,
     startTime: process.hrtime.bigint(),
     showExecutionTime: false,
 };
@@ -68,7 +68,7 @@ const formatDevelopmentLog = (level, args) => {
         if (arg instanceof Error) {
             return formatError(
                 arg,
-                loggerConfig.showStackTrace,
+                loggerConfig.showErrorStack,
                 loggerConfig.logFormat
             );
         }
@@ -89,8 +89,7 @@ const formatDevelopmentLog = (level, args) => {
             // TODO: Maybe implement RAW format or throw an error if it's not supported
         default: // RAW format
             return loggerConfig.colorizeLogs ?
-                colorizeLogParts(timestamp, level, argsWithFormattedErrors) :
-                [timestamp, `[${level.toUpperCase()}]`, ...argsWithFormattedErrors];
+                colorizeLogParts(timestamp, level, argsWithFormattedErrors) : [timestamp, `[${level.toUpperCase()}]`, ...argsWithFormattedErrors];
     }
 };
 
@@ -108,7 +107,7 @@ const init = (options = {}) => {
         timeStampFormat,
         colorizeLogs,
         logFormat,
-        showStackTrace,
+        showErrorStack,
         showExecutionTime,
     } = options;
 
@@ -125,7 +124,7 @@ const init = (options = {}) => {
     if (isString(timeStampFormat)) loggerConfig.timeStampFormat = timeStampFormat;
     if (isBoolean(colorizeLogs)) loggerConfig.colorizeLogs = colorizeLogs;
     if (isString(logFormat)) loggerConfig.logFormat = logFormat;
-    if (isBoolean(showStackTrace)) loggerConfig.showStackTrace = showStackTrace;
+    if (isBoolean(showErrorStack)) loggerConfig.showErrorStack = showErrorStack;
     if (isBoolean(showExecutionTime))
         loggerConfig.showExecutionTime = showExecutionTime;
 
@@ -190,7 +189,7 @@ const resetLogger = () => {
     loggerConfig.timeStampFormat = TIMESTAMP_FORMATS.ISO;
     loggerConfig.colorizeLogs = true;
     loggerConfig.logFormat = LOG_FORMATS.RAW;
-    loggerConfig.showStackTrace = false;
+    loggerConfig.showErrorStack = false;
     loggerConfig.showExecutionTime = false;
 };
 

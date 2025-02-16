@@ -54,14 +54,13 @@ const formatJsonLog = (timestamp, level, args) => {
 const formatTextLog = (timestamp, level, args, useColors) => {
     const formattedArgs = args.map((arg) => {
         if (typeof arg === VARIABLE_TYPES.OBJECT && arg !== null) {
-            return JSON.stringify(arg, null, 2);
+            return JSON.stringify(arg);
         }
         return arg;
     });
 
     return useColors ?
-        colorizeLogParts(timestamp, level, formattedArgs) :
-        [timestamp, `[${level.toUpperCase()}]`, ...formattedArgs];
+        colorizeLogParts(timestamp, level, formattedArgs) : [timestamp, `[${level.toUpperCase()}]`, ...formattedArgs];
 };
 
 const formatError = (error, showStackTrace, logFormat) => {

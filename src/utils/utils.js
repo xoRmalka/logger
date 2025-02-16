@@ -84,7 +84,7 @@ const formatError = (error, showStackTrace, logFormat) => {
                 error.stack
                 .split("\n")
                 .slice(1)
-                .map((line) => `  ${line.trim()}`)
+                .map((line) => `    ${line.trim()}`)
                 .join("\n");
         }
         return result;

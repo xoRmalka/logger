@@ -54,11 +54,12 @@ const formatDevelopmentLog = (level, args) => {
         getTimestamp(loggerConfig.timeStampFormat) :
         undefined;
 
-    if (loggerConfig.showExecutionTime) {
-        args.push({ executionTime: getExecutionTime(loggerConfig.startTime) });
-    }
+    const formattedArgs = formatLogArguments(args);
+    return formatLogOutput(timestamp, level, formattedArgs);
+};
 
-    const argsWithFormattedErrors = args.map((arg) => {
+const formatLogArguments = (args) => {
+    const formattedArgs = args.map((arg) => {
         if (arg instanceof Error) {
             return formatError(
                 arg,
@@ -69,20 +70,28 @@ const formatDevelopmentLog = (level, args) => {
         return arg;
     });
 
+    if (loggerConfig.showExecutionTime) {
+        formattedArgs.push({ executionTime: getExecutionTime(loggerConfig.startTime) });
+    }
+
+    return formattedArgs;
+};
+
+const formatLogOutput = (timestamp, level, args) => {
     switch (loggerConfig.logFormat) {
         case LOG_FORMATS.JSON:
-            return formatJsonLog(timestamp, level, argsWithFormattedErrors);
+            return formatJsonLog(timestamp, level, args);
         case LOG_FORMATS.TEXT:
             return formatTextLog(
                 timestamp,
                 level,
-                argsWithFormattedErrors,
+                args,
                 loggerConfig.colorizeLogs
             );
         case LOG_FORMATS.RAW:
         default:
             return loggerConfig.colorizeLogs ?
-                colorizeLogParts(timestamp, level, argsWithFormattedErrors) : [timestamp, `[${level.toUpperCase()}]`, ...argsWithFormattedErrors];
+                colorizeLogParts(timestamp, level, args) : [timestamp, `[${level.toUpperCase()}]`, ...args];
     }
 };
 

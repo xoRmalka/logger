@@ -120,7 +120,7 @@ The logger follows a specific priority order when determining environment settin
 init({ environment: "production" });
 ```
 
-2. Environment variables (NODE_ENV then LOGGER_ENV)
+2. Environment variables (LOGGER_ENV then NODE_ENV)
 ```bash
 NODE_ENV=production 
 LOGGER_ENV=production 

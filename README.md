@@ -174,4 +174,8 @@ Run tests in watch mode:
 npm run test:watch
 ```
 
+## License
+
+Licensed under the MIT License - see [LICENSE](LICENSE) for details.
+
 

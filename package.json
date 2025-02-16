@@ -15,5 +15,6 @@
     "author": "Or Malka <or.malka1234@gmail.com> (https://github.com/xoRmalka)",
     "devDependencies": {
         "jest": "^29.0.0"
-    }
+    },
+    "license": "MIT"
 }

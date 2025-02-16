@@ -12,12 +12,7 @@
         "url": "git+https://github.com/xoRmalka/logger.git"
     },
     "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/xoRmalka/logger/issues"
-    },
-    "homepage": "https://github.com/xoRmalka/logger#readme",
+    "author": "Or Malka <or.malka1234@gmail.com> (https://github.com/xoRmalka)",
     "devDependencies": {
         "jest": "^29.0.0"
     }

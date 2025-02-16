@@ -33,12 +33,13 @@ describe("Logger", () => {
 
     describe("Initialization", () => {
         test("initializes with default options", () => {
-            expect(init()).toBe(true);
+            logger.resetLogger();
+            expect(init({ environment: ENVIRONMENTS.DEVELOPMENT })).toBe(true);
         });
 
         test("throws error when initialized multiple times", () => {
-            init();
-            init();
+            init({ environment: ENVIRONMENTS.DEVELOPMENT });
+            init({ environment: ENVIRONMENTS.DEVELOPMENT });
             expect(consoleWarnSpy).toHaveBeenCalledWith(INIT_ERROR_MESSAGES.ALREADY_INITIALIZED);
         });
 
@@ -55,7 +56,7 @@ describe("Logger", () => {
 
     describe("Logging Methods", () => {
         beforeEach(() => {
-            init({ showErrorStack: true });
+            init({ showErrorStack: true, environment: ENVIRONMENTS.DEVELOPMENT });
         });
 
         test("logs message with log level", () => {
@@ -104,7 +105,7 @@ describe("Logger", () => {
 
     describe("Log Levels", () => {
         beforeEach(() => {
-            init();
+            init({ environment: ENVIRONMENTS.DEVELOPMENT });
         });
 
         test("respects log level hierarchy", () => {
@@ -129,7 +130,7 @@ describe("Logger", () => {
 
     describe("Formatting Options", () => {
         test("formats logs as JSON", () => {
-            init({ logFormat: LOG_FORMATS.JSON });
+            init({ logFormat: LOG_FORMATS.JSON, environment: ENVIRONMENTS.DEVELOPMENT });
             logger.info(TEST_MESSAGE);
 
             const logCall = consoleInfoSpy.mock.calls[0];
@@ -142,7 +143,7 @@ describe("Logger", () => {
         });
 
         test("formats timestamp according to specified format", () => {
-            init({ timeStampFormat: TIMESTAMP_FORMATS.UNIX });
+            init({ timeStampFormat: TIMESTAMP_FORMATS.UNIX, environment: ENVIRONMENTS.DEVELOPMENT });
             logger.info(TEST_MESSAGE);
 
             const timestamp = consoleInfoSpy.mock.calls[0][0];

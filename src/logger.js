@@ -106,7 +106,7 @@ const init = (options = {}) => {
     } = options;
 
     const environment =
-        optionsEnvironment || process.env.ENVIRONMENT || ENVIRONMENTS.DEVELOPMENT;
+        optionsEnvironment || process.env.LOGGER_ENV || process.env.NODE_ENV || ENVIRONMENTS.DEVELOPMENT;
 
     if (![ENVIRONMENTS.DEVELOPMENT, ENVIRONMENTS.PRODUCTION].includes(environment)) {
         console.warn(INIT_ERROR_MESSAGES.INVALID_ENVIRONMENT);

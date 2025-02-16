@@ -12,6 +12,7 @@ const {
     LOG_FORMATS,
     LOG_LEVELS,
     INVALID_STRING,
+    TEST_MESSAGE,
 } = require("../src/constants");
 
 describe("Utils", () => {
@@ -50,13 +51,13 @@ describe("Utils", () => {
         });
 
         test("wraps text with color codes", () => {
-            const coloredText = colorize("test", COLORS.RED);
-            expect(coloredText).toBe(`${COLORS.RED}test${COLORS.RESET}`);
+            const coloredText = colorize(TEST_MESSAGE, COLORS.RED);
+            expect(coloredText).toBe(`${COLORS.RED}${TEST_MESSAGE}${COLORS.RESET}`);
         });
     });
 
     describe("formatError", () => {
-        const testError = new Error("Test error");
+        const testError = new Error(TEST_MESSAGE);
         testError.code = "TEST_001";
 
         test("formats error without stack trace", () => {
@@ -64,7 +65,7 @@ describe("Utils", () => {
             expect(result).toEqual({
                 type: LOG_LEVELS.ERROR,
                 name: "Error",
-                message: "Test error",
+                message: TEST_MESSAGE,
                 code: "TEST_001",
             });
             expect(result.stack).toBeUndefined();
@@ -72,7 +73,7 @@ describe("Utils", () => {
 
         test("formats error for TEXT format with stack trace", () => {
             const result = formatError(testError, true, LOG_FORMATS.TEXT);
-            expect(result).toContain("Error: Test error");
+            expect(result).toContain(TEST_MESSAGE);
             expect(result).toContain("at ");
         });
 
@@ -82,7 +83,7 @@ describe("Utils", () => {
                 expect.objectContaining({
                     type: LOG_LEVELS.ERROR,
                     name: "Error",
-                    message: "Test error",
+                    message: TEST_MESSAGE,
                     stack: expect.any(String),
                     code: "TEST_001",
                 })

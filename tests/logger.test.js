@@ -56,7 +56,7 @@ describe("Logger", () => {
 
     describe("Logging Methods", () => {
         beforeEach(() => {
-            init({ showStackTrace: true });
+            init({ showErrorStack: true });
         });
 
         test("logs message with log level", () => {
